@@ -22,9 +22,15 @@ async function run() {
     const booksCategories = client
       .db(`used-products-resale`)
       .collection(`books-categories`);
-    const novelBooks = client
-      .db(`used-products-resale`)
-      .collection(`books`);
+    const books = client.db(`used-products-resale`).collection(`books`);
+
+    app.get("/advertise", async (req, res) => {
+      const query = { advertise: "true" };
+      const cursor = books.find(query);
+      const results = await cursor.toArray();
+      console.log(results);
+      res.send(results);
+    });
 
     app.get("/books-categories", async (req, res) => {
       const query = {};
@@ -35,7 +41,7 @@ async function run() {
     app.get("/books/:category_name", async (req, res) => {
       const category_name = req.params.category_name;
       const query = { category_name: category_name };
-      const cursor = await novelBooks.find(query).toArray();
+      const cursor = await books.find(query).toArray();
       res.send(cursor);
     });
   } catch {}
