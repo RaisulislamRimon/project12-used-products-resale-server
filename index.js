@@ -2,7 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const app = express();
 require("dotenv").config();
-const { MongoClient, ServerApiVersion } = require("mongodb");
+const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 
 app.use(cors());
 app.use(express.json());
@@ -28,6 +28,16 @@ async function run() {
       const query = { advertise: "true" };
       const cursor = books.find(query);
       const results = await cursor.toArray();
+      console.log(results);
+      res.send(results);
+    });
+
+    app.get("/advertise/:advertiseId", async (req, res) => {
+      // console.log(req.params.advertiseId);
+      const query = { _id: ObjectId(req.params.advertiseId) };
+      console.log(query);
+      const cursor = books.findOne(query);
+      const results = await cursor;
       console.log(results);
       res.send(results);
     });
