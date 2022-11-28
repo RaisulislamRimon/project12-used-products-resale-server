@@ -23,12 +23,13 @@ async function run() {
       .db(`used-products-resale`)
       .collection(`books-categories`);
     const books = client.db(`used-products-resale`).collection(`books`);
+    const users = client.db(`used-products-resale`).collection(`users`);
 
     app.get("/advertise", async (req, res) => {
       const query = { advertise: "true" };
       const cursor = books.find(query);
       const results = await cursor.toArray();
-      console.log(results);
+      // console.log(results);
       res.send(results);
     });
 
@@ -38,7 +39,7 @@ async function run() {
       console.log(query);
       const cursor = books.findOne(query);
       const results = await cursor;
-      console.log(results);
+      // console.log(results);
       res.send(results);
     });
 
@@ -53,6 +54,16 @@ async function run() {
       const query = { category_name: category_name };
       const cursor = await books.find(query).toArray();
       res.send(cursor);
+    });
+
+    app.post("/signup", async (req, res) => {
+      const query = {
+        email: req.body.email,
+        password: req.body.password,
+        checked: req.body.checked,
+        userIdFirebase: req.body.userIdFirebase,
+      };
+      console.log(query);
     });
   } catch {}
 }
