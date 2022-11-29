@@ -58,6 +58,7 @@ async function run() {
 
     app.post("/signup", async (req, res) => {
       const query = {
+        name: req.body.name,
         email: req.body.email,
         password: req.body.password,
         checked: req.body.checked,
