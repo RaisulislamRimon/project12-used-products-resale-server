@@ -25,6 +25,9 @@ async function run() {
     const books = client.db(`used-products-resale`).collection(`books`);
     const users = client.db(`used-products-resale`).collection(`users`);
     const orderInfo = client.db(`used-products-resale`).collection(`orderInfo`);
+    const addProduct = client
+      .db(`used-products-resale`)
+      .collection(`addProduct`);
 
     app.get("/advertise", async (req, res) => {
       const query = { advertise: "true" };
@@ -81,6 +84,13 @@ async function run() {
       const cursor = await users.findOne(query);
       res.send(cursor);
       // console.log(cursor);
+    });
+
+    app.post("/add-product", async (req, res) => {
+      const query = req.body;
+      // const result = await addProduct.insertOne(query);
+      const result = await books.insertOne(query);
+      res.send(result);
     });
   } catch {}
 }
