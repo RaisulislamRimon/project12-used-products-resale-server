@@ -63,7 +63,8 @@ async function run() {
         checked: req.body.checked,
         userIdFirebase: req.body.userIdFirebase,
       };
-      console.log(query);
+      const result = await users.insertOne(query);
+      res.send(result);
     });
   } catch {}
 }
