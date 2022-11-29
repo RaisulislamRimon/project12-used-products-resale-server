@@ -92,6 +92,13 @@ async function run() {
       const result = await books.insertOne(query);
       res.send(result);
     });
+
+    app.get("/my-books", async (req, res) => {
+      const email = req.query.email;
+      const query = { email: email };
+      const cursor = await books.find(query).toArray();
+      res.send(cursor);
+    });
   } catch {}
 }
 
