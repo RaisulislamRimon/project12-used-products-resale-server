@@ -74,6 +74,14 @@ async function run() {
       const result = await orderInfo.insertOne(query);
       res.send(result);
     });
+
+    app.get("/user-type-find", async (req, res) => {
+      const email = req.query.email;
+      const query = { email: email };
+      const cursor = await users.findOne(query);
+      res.send(cursor);
+      // console.log(cursor);
+    });
   } catch {}
 }
 
