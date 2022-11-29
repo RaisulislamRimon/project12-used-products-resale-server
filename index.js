@@ -24,6 +24,7 @@ async function run() {
       .collection(`books-categories`);
     const books = client.db(`used-products-resale`).collection(`books`);
     const users = client.db(`used-products-resale`).collection(`users`);
+    const orderInfo = client.db(`used-products-resale`).collection(`orderInfo`);
 
     app.get("/advertise", async (req, res) => {
       const query = { advertise: "true" };
@@ -65,6 +66,12 @@ async function run() {
         userIdFirebase: req.body.userIdFirebase,
       };
       const result = await users.insertOne(query);
+      res.send(result);
+    });
+
+    app.post("/buy-now", async (req, res) => {
+      const query = req.body;
+      const result = await orderInfo.insertOne(query);
       res.send(result);
     });
   } catch {}
