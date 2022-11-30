@@ -125,6 +125,13 @@ async function run() {
       // res.send(result);
       console.log(result);
     });
+
+    app.delete("/my-books/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: ObjectId(id) };
+      const result = await books.deleteOne(query);
+      res.send(result);
+    });
   } catch {}
 }
 
