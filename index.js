@@ -139,6 +139,13 @@ async function run() {
       const cursor = await orderInfo.find(query).toArray();
       res.send(cursor);
     });
+
+    app.get("/my-orders/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: ObjectId(id) };
+      const cursor = await orderInfo.findOne(query);
+      res.send(cursor);
+    });
   } catch {}
 }
 
