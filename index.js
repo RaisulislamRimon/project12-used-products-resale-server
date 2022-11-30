@@ -2,6 +2,8 @@ const express = require("express");
 const cors = require("cors");
 const app = express();
 require("dotenv").config();
+const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
+
 const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 
 app.use(cors());
@@ -28,6 +30,24 @@ async function run() {
     const addProduct = client
       .db(`used-products-resale`)
       .collection(`addProduct`);
+
+    app.post("/create-payment-intent", async (req, res) => {
+      console.log(orders);
+      console.log(orders, price);
+      // const orders = req.body;
+      // const price = orders.resalePrice;
+      // const amount = price * 100;
+
+      // const paymentIntent = await stripe.paymentIntents.create({
+      //   currency: "usd",
+      //   amount: amount,
+      //   payment_method_types: ["card"],
+      // });
+
+      // res.send({
+      //   clientSecret: paymentIntent.client_secret,
+      // });
+    });
 
     app.get("/advertise", async (req, res) => {
       const query = { advertise: "true" };
