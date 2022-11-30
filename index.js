@@ -132,6 +132,13 @@ async function run() {
       const result = await books.deleteOne(query);
       res.send(result);
     });
+
+    app.get("/my-orders", async (req, res) => {
+      const email = req.query.email;
+      const query = { email: email };
+      const cursor = await orderInfo.find(query).toArray();
+      res.send(cursor);
+    });
   } catch {}
 }
 
