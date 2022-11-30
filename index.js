@@ -78,6 +78,19 @@ async function run() {
       res.send(result);
     });
 
+    app.put("/buy-now/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: ObjectId(id) };
+      const update = {
+        $set: {
+          available: "sold",
+        },
+      };
+      const result = await books.updateOne(query, update);
+      res.send(result);
+      // console.log(result);
+    });
+
     app.get("/user-type-find", async (req, res) => {
       const email = req.query.email;
       const query = { email: email };
@@ -98,6 +111,19 @@ async function run() {
       const query = { email: email };
       const cursor = await books.find(query).toArray();
       res.send(cursor);
+    });
+
+    app.patch("/books/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: ObjectId(id) };
+      const update = {
+        $set: {
+          available: req.body.title,
+        },
+      };
+      const result = await books.updateOne(query, update);
+      // res.send(result);
+      console.log(result);
     });
   } catch {}
 }
