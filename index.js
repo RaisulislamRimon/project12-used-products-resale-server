@@ -30,23 +30,26 @@ async function run() {
     const addProduct = client
       .db(`used-products-resale`)
       .collection(`addProduct`);
+    const paymentCollection = client
+      .db(`used-products-resale`)
+      .collection(`paymentCollection`);
 
     app.post("/create-payment-intent", async (req, res) => {
-      console.log(orders);
-      console.log(orders, price);
-      // const orders = req.body;
-      // const price = orders.resalePrice;
-      // const amount = price * 100;
+      const orders = req.body;
+      const price = orders.resalePrice;
+      const amount = price * 100;
+      // console.log(orders);
+      // console.log(orders, price);
 
-      // const paymentIntent = await stripe.paymentIntents.create({
-      //   currency: "usd",
-      //   amount: amount,
-      //   payment_method_types: ["card"],
-      // });
+      const paymentIntent = await stripe.paymentIntents.create({
+        currency: "usd",
+        amount: amount,
+        payment_method_types: ["card"],
+      });
 
-      // res.send({
-      //   clientSecret: paymentIntent.client_secret,
-      // });
+      res.send({
+        clientSecret: paymentIntent.client_secret,
+      });
     });
 
     app.get("/advertise", async (req, res) => {
@@ -165,6 +168,39 @@ async function run() {
       const query = { _id: ObjectId(id) };
       const cursor = await orderInfo.findOne(query);
       res.send(cursor);
+    });
+
+    app.get(`/allusers/user-type/:email`, async (req, res) => {
+      const email = req.params.email;
+      const query = { email: email };
+      // console.log(query);
+      const user = await users.find(query).toArray();
+      console.log(user[0]?.checked);
+      res.send(user[0]?.checked);
+      // // console.log(user[0]?.role);
+      // res.send({ isAdmin: user[0]?.role === `admin` });
+    });
+
+    app.post("/payments", async (req, res) => {
+      const payment = req.body;
+      const result = await paymentCollection.insertOne(payment);
+      res.send(result);
+    });
+
+    app.put("/makeorderpaid/:orderinfoid", async (req, res) => {
+      const orderInfoId = req.params.orderinfoid;
+      console.log();
+      console.log(orderInfoId);
+      if (req.body.isPaid) {
+        const query = { _id: ObjectId(orderInfoId) };
+        const update = {
+          $set: {
+            paymentStatus: "paid",
+          },
+        };
+        const result = await orderInfo.updateOne(query, update);
+        res.send(result);
+      }
     });
   } catch {}
 }
