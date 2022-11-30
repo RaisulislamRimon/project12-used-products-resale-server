@@ -84,6 +84,7 @@ async function run() {
       const update = {
         $set: {
           available: "sold",
+          advertise: "false",
         },
       };
       const result = await books.updateOne(query, update);
@@ -113,17 +114,16 @@ async function run() {
       res.send(cursor);
     });
 
-    app.patch("/books/:id", async (req, res) => {
+    app.put("/my-books/:id", async (req, res) => {
       const id = req.params.id;
       const query = { _id: ObjectId(id) };
       const update = {
         $set: {
-          available: req.body.title,
+          advertise: "true",
         },
       };
       const result = await books.updateOne(query, update);
-      // res.send(result);
-      console.log(result);
+      res.send(result);
     });
 
     app.delete("/my-books/:id", async (req, res) => {
