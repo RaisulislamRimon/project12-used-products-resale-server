@@ -229,6 +229,12 @@ async function run() {
         res.send(result);
       }
     });
+
+    app.get("/all-sellers", async (req, res) => {
+      const query = { checked: "seller" };
+      const result = await users.find(query).toArray();
+      res.send(result);
+    });
   } catch {}
 }
 
