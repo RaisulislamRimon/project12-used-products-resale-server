@@ -233,6 +233,16 @@ async function run() {
     app.get("/all-sellers", async (req, res) => {
       const query = { checked: "seller" };
       const result = await users.find(query).toArray();
+      console.log(result);
+      res.send(result);
+    });
+
+    app.delete("/all-sellers/delete/:sellerId", async (req, res) => {
+      const sellerId = req.params.sellerId;
+      const query = { _id: ObjectId(sellerId) };
+      // console.log(query);
+      const result = await users.deleteOne(query);
+      // console.log(result);
       res.send(result);
     });
   } catch {}
