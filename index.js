@@ -233,13 +233,29 @@ async function run() {
     app.get("/all-sellers", async (req, res) => {
       const query = { checked: "seller" };
       const result = await users.find(query).toArray();
-      console.log(result);
+      // console.log(result);
       res.send(result);
     });
 
     app.delete("/all-sellers/delete/:sellerId", async (req, res) => {
       const sellerId = req.params.sellerId;
       const query = { _id: ObjectId(sellerId) };
+      // console.log(query);
+      const result = await users.deleteOne(query);
+      // console.log(result);
+      res.send(result);
+    });
+
+    app.get("/all-buyers", async (req, res) => {
+      const query = { checked: "buyer" };
+      const result = await users.find(query).toArray();
+      // console.log(result);
+      res.send(result);
+    });
+
+    app.delete("/all-buyers/delete/:buyerId", async (req, res) => {
+      const buyerId = req.params.buyerId;
+      const query = { _id: ObjectId(buyerId) };
       // console.log(query);
       const result = await users.deleteOne(query);
       // console.log(result);
