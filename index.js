@@ -175,10 +175,37 @@ async function run() {
       const query = { email: email };
       // console.log(query);
       const user = await users.find(query).toArray();
-      console.log(user[0]?.checked);
+      // console.log(user[0]?.checked);
       res.send(user[0]?.checked);
       // // console.log(user[0]?.role);
       // res.send({ isAdmin: user[0]?.role === `admin` });
+    });
+
+    app.get("/allusers/admin/:email", async (req, res) => {
+      const email = req.params.email;
+      const query = { email };
+      const userType = await users.findOne(query);
+      // console.log(userType);
+      // console.log(userType?.checked);
+      res.send({ isAdmin: userType?.checked === `admin` });
+    });
+
+    app.get("/allusers/seller/:email", async (req, res) => {
+      const email = req.params.email;
+      const query = { email };
+      const userType = await users.findOne(query);
+      // console.log(userType);
+      // console.log(userType?.checked);
+      res.send({ isSeller: userType?.checked === `seller` });
+    });
+
+    app.get("/allusers/buyer/:email", async (req, res) => {
+      const email = req.params.email;
+      const query = { email };
+      const userType = await users.findOne(query);
+      // console.log(userType);
+      // console.log(userType?.checked);
+      res.send({ isBuyer: userType?.checked === `buyer` });
     });
 
     app.post("/payments", async (req, res) => {
