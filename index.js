@@ -170,6 +170,20 @@ async function run() {
       res.send(cursor);
     });
 
+    app.get("/my-buyers", async (req, res) => {
+      const email = req.query.email;
+      const query = { sellerEmail: email };
+      const cursor = await orderInfo.find(query).toArray();
+      res.send(cursor);
+    });
+
+    app.get("/my-buyers/delete/:buyerId", async (req, res) => {
+      const buyerId = req.params.buyerId;
+      const query = { _id: ObjectId(buyerId) };
+      const result = await orderInfo.deleteOne(query);
+      res.send(result);
+    });
+
     app.get(`/allusers/user-type/:email`, async (req, res) => {
       const email = req.params.email;
       const query = { email: email };
