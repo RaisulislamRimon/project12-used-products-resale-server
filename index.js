@@ -21,14 +21,17 @@ const client = new MongoClient(uri, {
 });
 
 function verifyJWT(req, res, next) {
-  const authHeader = req.headers.authorization;
+  const authHeader = req?.headers?.authorization;
+  console.log(authHeader);
   if (!authHeader) {
-    return res.status(401).send({ message: "unauthorized access" });
+    // return res.status(401).send({ message: "unauthorized access" });
+    res.status(401).send({ message: "unauthorized access" });
   }
   const token = authHeader.split(" ")[1];
   jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, function (err, decoded) {
     if (err) {
-      return res.status(401).send({ message: "unauthorized access" });
+      // return res.status(401).send({ message: "unauthorized access" });
+      res.status(401).send({ message: "unauthorized access" });
     }
     req.decoded = decoded;
     next();
@@ -76,7 +79,7 @@ async function run() {
       });
     });
 
-    app.get("/advertise", verifyJWT, async (req, res) => {
+    app.get("/advertise", async (req, res) => {
       const query = { advertise: "true" };
       const cursor = books.find(query);
       const results = await cursor.toArray();
@@ -180,12 +183,12 @@ async function run() {
       res.send(result);
     });
 
-    app.get("/my-orders", verifyJWT, async (req, res) => {
-      const decoded = req.decoded;
-      console.log("inside decoded", decoded);
-      if (decoded.email !== req.query.email) {
-        res.status(401).send({ message: "unauthorized access" });
-      }
+    app.get("/my-orders", async (req, res) => {
+      // const decoded = req.decoded;
+      // console.log("inside decoded", decoded);
+      // if (decoded.email !== req.query.email) {
+      //   res.status(401).send({ message: "unauthorized access" });
+      // }
       let query = {};
       if (req.query.email) {
         query = { email: req.query.email };
@@ -203,7 +206,7 @@ async function run() {
       res.send(cursor);
     });
 
-    app.get("/my-buyers", verifyJWT, async (req, res) => {
+    app.get("/my-buyers", async (req, res) => {
       const email = req.query.email;
       const query = { sellerEmail: email };
       const cursor = await orderInfo.find(query).toArray();
