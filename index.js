@@ -97,6 +97,12 @@ async function run() {
       res.send(results);
     });
 
+    app.get("/all-books", async (req, res) => {
+      const query = {};
+      const cursor = await books.find(query).toArray();
+      res.send(cursor);
+    });
+
     app.get("/books-categories", async (req, res) => {
       const query = {};
       const cursor = await booksCategories.find(query).toArray();
